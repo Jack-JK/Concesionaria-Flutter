@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/registro.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key, required this.title});
@@ -7,7 +8,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inicio de Sesión,'),
+        title: const Text('Inicio de Sesión'),
       ),
       body: Center(
         child: Padding(
@@ -52,7 +53,10 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // Add your register logic here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegisterPage()),
+                  );
                 },
                 child: const Text('¿No tienes una cuenta? Regístrate aquí'),
               ),

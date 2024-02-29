@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => LoginPage(title: 'login')),
+                    builder: (context) => const LoginPage(title: 'login')),
               );
             },
             child: const Text('Iniciar Sesión'),
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               // Acción para "Nosotros"
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NosotrosPage()),
+                MaterialPageRoute(builder: (context) => const NosotrosPage()),
               );
             },
             child: const Text('Nosotros'),
