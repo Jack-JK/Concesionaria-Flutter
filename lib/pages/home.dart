@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Contenido de la página de inicio',
+          'Contenido de la página de inicio sadfsdfjsdfsdfsdfsdfsdf',
           style: TextStyle(fontSize: 24),
         ),
       ),
