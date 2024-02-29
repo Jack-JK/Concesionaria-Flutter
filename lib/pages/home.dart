@@ -16,7 +16,8 @@ class HomePage extends StatelessWidget {
               // Acción para "Iniciar Sesión"
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage(title: 'login')),
+                MaterialPageRoute(
+                    builder: (context) => LoginPage(title: 'login')),
               );
             },
             child: const Text('Iniciar Sesión'),
@@ -33,11 +34,8 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          'Contenido de la página de inicio sadfsdfjsdfsdfsdfsdfsdf',
-          style: TextStyle(fontSize: 24),
-        ),
+      body: Center(
+        child: Image.asset('assets/logo.png'),
       ),
     );
   }
