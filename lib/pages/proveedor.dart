@@ -22,25 +22,31 @@ class ProveedorPage extends StatelessWidget {
                 child: Text('Menu'),
               ),
               ListTile(
-                title: const Text('Compra'),
+                title: const Text('Marca'),
                 onTap: () {
                   // Agregar navegación a Compra
                 },
               ),
               ListTile(
-                title: const Text('Venta'),
+                title: const Text('Modelo'),
                 onTap: () {
                   // Agregar navegación a Venta
                 },
               ),
               ListTile(
-                title: const Text('Registrar Marca'),
+                title: const Text('Proveedor'),
                 onTap: () {
                   // Agregar navegación a Registrar Marca
                 },
               ),
               ListTile(
-                title: const Text('Proveedor'),
+                title: const Text('Compra'),
+                onTap: () {
+                  // Add navigation logic here
+                },
+              ),
+              ListTile(
+                title: const Text('Venta'),
                 onTap: () {
                   // Agregar navegación a Proveedor
                 },
