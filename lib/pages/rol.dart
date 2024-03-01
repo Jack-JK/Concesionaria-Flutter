@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/marca.dart';
 import 'package:flutter_application_1/pages/modelo.dart';
 import 'package:flutter_application_1/pages/proveedor.dart';
-import 'package:flutter_application_1/pages/rol.dart';
 
-class MarcaPage extends StatelessWidget {
-  const MarcaPage({Key? key}) : super(key: key);
+
+class RolPage extends StatelessWidget {
+  const RolPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro de Marca'),
+        title: const Text('Registro de Rol'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -104,34 +105,40 @@ class MarcaPage extends StatelessWidget {
             children: [
               const TextField(
                 decoration: InputDecoration(
-                  labelText: 'ID',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Marca',
+                  labelText: 'Nombre del Rol',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Add logic to save marca
+                  // Add logic to save rol
                 },
-                child: const Text('Guardar'),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.save),
+                    SizedBox(width: 5),
+                    Text('Guardar Rol'),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Add logic to save marca
+                  // Add logic to save rol
                 },
-                child: const Text('Leer'),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.read_more),
+                    SizedBox(width: 5),
+                    Text('Leer Rol'),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               const Text(
-                'Tabla de Marcas:',
+                'Tabla de Roles:',
                 style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 10),
@@ -142,19 +149,19 @@ class MarcaPage extends StatelessWidget {
                 child: DataTable(
                   columns: const <DataColumn>[
                     DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Marca')),
+                    DataColumn(label: Text('Nombre del Rol')),
                   ],
                   rows: const <DataRow>[
                     DataRow(
                       cells: <DataCell>[
                         DataCell(Text('1')),
-                        DataCell(Text('Marca 1')),
+                        DataCell(Text('Rol 1')),
                       ],
                     ),
                     DataRow(
                       cells: <DataCell>[
                         DataCell(Text('2')),
-                        DataCell(Text('Marca 2')),
+                        DataCell(Text('Rol 2')),
                       ],
                     ),
                   ],

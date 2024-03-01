@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/marca.dart';
+import 'package:flutter_application_1/pages/proveedor.dart';
+import 'package:flutter_application_1/pages/rol.dart';
 
 
 class ModeloPage extends StatelessWidget {
@@ -13,7 +17,7 @@ class ModeloPage extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
@@ -23,43 +27,71 @@ class ModeloPage extends StatelessWidget {
             ListTile(
               title: const Text('Marca'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Marca
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Modelo'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Modelo
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ModeloPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Proveedor'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Proveedor
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProveedorPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Compra'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Compra
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Venta'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Venta
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Rol'),
               onTap: () {
-                // Add navigation logic here
+                // Navegación a Rol
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RolPage())
+                );
               },
             ),
             ListTile(
               title: const Text('Cerrar sesión'),
               onTap: () {
-                // Add logout logic here
+                // Navegación a home
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage())
+                );
               },
             ),
           ],
@@ -97,6 +129,12 @@ class ModeloPage extends StatelessWidget {
                   // Add logic to save modelo
                 },
                 child: const Text('Guardar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Add logic to save modelo
+                },
+                child: const Text('Leer'),
               ),
               const SizedBox(height: 20),
               const Text(
