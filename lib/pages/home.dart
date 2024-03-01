@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login.dart';
-import 'package:flutter_application_1/pages/nosotros.dart';
+//import 'package:flutter_application_1/pages/nosotros.dart';
+import 'package:flutter_application_1/pages/proveedor.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class HomePage extends StatelessWidget {
               // Acción para "Nosotros"
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NosotrosPage()),
+                MaterialPageRoute(builder: (context) => const ProveedorPage()),
               );
             },
             child: const Text('Nosotros'),
