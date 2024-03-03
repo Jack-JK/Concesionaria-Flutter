@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/compra.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/marca.dart';
 import 'package:flutter_application_1/pages/proveedor.dart';
 import 'package:flutter_application_1/pages/rol.dart';
+import 'package:flutter_application_1/pages/venta.dart';
 
 
 class ModeloPage extends StatelessWidget {
@@ -60,7 +62,7 @@ class ModeloPage extends StatelessWidget {
                 // Navegación a Compra
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                  MaterialPageRoute(builder: (context) => const CompraPage())
                 );
               },
             ),
@@ -70,7 +72,7 @@ class ModeloPage extends StatelessWidget {
                 // Navegación a Venta
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                  MaterialPageRoute(builder: (context) => const VentaPage())
                 );
               },
             ),
