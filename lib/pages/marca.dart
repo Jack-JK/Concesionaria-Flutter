@@ -1,13 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/compra.dart';
-import 'package:flutter_application_1/pages/home.dart';
-import 'package:flutter_application_1/pages/modelo.dart';
-import 'package:flutter_application_1/pages/proveedor.dart';
-import 'package:flutter_application_1/pages/rol.dart';
-import 'package:flutter_application_1/pages/venta.dart';
+import 'package:flutter_application_1/service/firebase_service.dart';
 
-class MarcaPage extends StatelessWidget {
+class MarcaPage extends StatefulWidget {
   const MarcaPage({Key? key}) : super(key: key);
+
+  @override
+  State<MarcaPage> createState() => _MarcaPageState();
+}
+
+class _MarcaPageState extends State<MarcaPage> {
+  List<Map<String, dynamic>> _marcas = [];
+  final marcaController = TextEditingController();
+
+  void _limpiarCampo() {
+    marcaController.clear();
+  }
+
+  void _leerMarcas() {
+    FirebaseFirestore.instance.collection('Marca').get().then((querySnapshot) {
+      final List<Map<String, dynamic>> marcas = [];
+      querySnapshot.docs.forEach((doc) {
+        marcas.add({
+          'ID': doc.id,
+          'Marca': doc['Marca'],
+        });
+      });
+      setState(() {
+        _marcas = marcas;
+      });
+    }).catchError((error) {
+      print('Error al leer marcas: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,158 +40,98 @@ class MarcaPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Registro de Marca'),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const DrawerHeader(
+            ElevatedButton(
+              onPressed: () {
+                _limpiarCampo();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Nueva Marca'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: marcaController,
+                            decoration: const InputDecoration(labelText: 'Nombre de la Marca'),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _limpiarCampo();
+                          },
+                          child: const Text('Cancelar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (marcaController.text.isNotEmpty) {
+                              FirebaseService.guardarMarca(marcaController.text).then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Marca guardada correctamente')),
+                                );
+                                Navigator.of(context).pop();
+                                _limpiarCampo();
+                              }).catchError((error) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error al guardar la marca: $error')),
+                                );
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Por favor, ingrese el nombre de la marca')),
+                              );
+                            }
+                          },
+                          child: const Text('Guardar Marca'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text('Crear nueva Marca'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _leerMarcas,
+              child: const Text('Leer Marcas'),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Tabla de Marcas:',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            Container(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                border: Border.all(color: Colors.black),
               ),
-              child: Text('Menu'),
-            ),
-            ListTile(
-              title: const Text('Marca'),
-              onTap: () {
-                // Navegación a Marca
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MarcaPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Modelo'),
-              onTap: () {
-                // Navegación a Modelo
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ModeloPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Proveedor'),
-              onTap: () {
-                // Navegación a Proveedor
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProveedorPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Compra'),
-              onTap: () {
-                // Navegación a Compra
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CompraPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Venta'),
-              onTap: () {
-                // Navegación a Venta
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const VentaPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Rol'),
-              onTap: () {
-                // Navegación a Rol
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RolPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Cerrar sesión'),
-              onTap: () {
-                // Navegación a home
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage())
-                );
-              },
+              child: DataTable(
+                columns: const <DataColumn>[
+                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('Marca')),
+                ],
+                rows: _marcas.map((marca) {
+                  return DataRow(
+                    cells: [
+                      DataCell(Text(marca['ID'].toString())),
+                      DataCell(Text(marca['Marca'])),
+                    ],
+                  );
+                }).toList(),
+              ),
             ),
           ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'ID',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Marca',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add logic to save marca
-                },
-                child: const Text('Guardar'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add logic to save marca
-                },
-                child: const Text('Leer'),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Tabla de Marcas:',
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                ),
-                child: DataTable(
-                  columns: const <DataColumn>[
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Marca')),
-                  ],
-                  rows: const <DataRow>[
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('1')),
-                        DataCell(Text('Marca 1')),
-                      ],
-                    ),
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('2')),
-                        DataCell(Text('Marca 2')),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 }
-
