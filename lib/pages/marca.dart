@@ -22,11 +22,6 @@ class _MarcaPageState extends State<MarcaPage> {
     marcaController.clear();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _leerMarcas();
-  }
   void _leerMarcas() {
     FirebaseService.leerMarcas().then((marcas) {
       setState(() {

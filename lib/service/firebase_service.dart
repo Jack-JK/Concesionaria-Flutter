@@ -21,7 +21,7 @@ class FirebaseService {
 
     DocumentReference contadorRef = _db.collection("Contador").doc(coleccion);
     await _db.runTransaction((transaction) async {
-      DocumentSnapshot doc = await transaction.get(contadorRef);
+      await transaction.get(contadorRef);
       transaction.update(contadorRef, {'valor': nuevoID});
     });
 
@@ -78,4 +78,31 @@ class FirebaseService {
     }).toList());
   }
 
+  // TABLA PROVEEDOR
+  static Future<void> guardarProveedor(String razonSocial, int telefono, String direccion) async {
+    int nuevoID = await _asignarID('Proveedor');
+
+    await _db.collection('Proveedor').doc(nuevoID.toString()).set({
+      'Razon_Social': razonSocial,
+      'Telefono': telefono,
+      'Direccion': direccion,
+    });
+  }
+
+  static Future<List<Map<String, dynamic>>> leerProveedores() async {
+    QuerySnapshot querySnapshot = await _db.collection('Proveedor').get();
+
+    return querySnapshot.docs.map((doc) {
+      return {
+        'ID': doc.id,
+        'Razon_Social': doc['Razon_Social'],
+        'Telefono': doc['Telefono'],
+        'Direccion': doc['Direccion'],
+      };
+    }).toList();
+  }
+
+
+
+  
 }
