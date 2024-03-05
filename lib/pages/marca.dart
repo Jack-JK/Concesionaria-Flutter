@@ -1,5 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/compra.dart';
+import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/modelo.dart';
+import 'package:flutter_application_1/pages/proveedor.dart';
+import 'package:flutter_application_1/pages/rol.dart';
+import 'package:flutter_application_1/pages/venta.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 
 class MarcaPage extends StatefulWidget {
@@ -17,15 +22,13 @@ class _MarcaPageState extends State<MarcaPage> {
     marcaController.clear();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _leerMarcas();
+  }
   void _leerMarcas() {
-    FirebaseFirestore.instance.collection('Marca').get().then((querySnapshot) {
-      final List<Map<String, dynamic>> marcas = [];
-      querySnapshot.docs.forEach((doc) {
-        marcas.add({
-          'ID': doc.id,
-          'Marca': doc['Marca'],
-        });
-      });
+    FirebaseService.leerMarcas().then((marcas) {
       setState(() {
         _marcas = marcas;
       });
@@ -39,6 +42,89 @@ class _MarcaPageState extends State<MarcaPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registro de Marca'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Menu'),
+            ),
+            ListTile(
+              title: const Text('Marca'),
+              onTap: () {
+                // Navegación a Marca
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MarcaPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Modelo'),
+              onTap: () {
+                // Navegación a Modelo
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ModeloPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Proveedor'),
+              onTap: () {
+                // Navegación a Proveedor
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProveedorPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Compra'),
+              onTap: () {
+                // Navegación a Compra
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CompraPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Venta'),
+              onTap: () {
+                // Navegación a Venta
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VentaPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Rol'),
+              onTap: () {
+                // Navegación a Rol
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RolPage())
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Cerrar sesión'),
+              onTap: () {
+                // Navegación a home
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage())
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

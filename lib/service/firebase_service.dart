@@ -37,7 +37,45 @@ class FirebaseService {
     });
   }
 
+
+  //TABLA MARCA  
   static Future<void> guardarMarca(String marca) async {
     await guardar('Marca', {'Marca': marca});
   }
+
+  static Future<List<Map<String, dynamic>>> leerMarcas() async {
+    QuerySnapshot querySnapshot = await _db.collection('Marca').get();
+
+    return querySnapshot.docs.map((doc) {
+      return {
+        'ID': doc.id,
+        'Marca': doc['Marca'],
+      };
+    }).toList();
+  }
+
+  // TABLA MODELO
+  static Future<void> guardarModelo(String modelo, String idMarca) async {
+    await guardar('Modelo', {
+      'Modelo': modelo,
+      'Id_Marca': _db.collection('Marca').doc(idMarca), // Guardar la referencia a la marca
+    });
+  }
+
+  // TABLA MODELO
+  static Future<List<Map<String, dynamic>>> leerModelos() async {
+    QuerySnapshot querySnapshot = await _db.collection('Modelo').get();
+
+    return Future.wait(querySnapshot.docs.map((doc) async {
+      DocumentSnapshot marcaDoc = await doc['Id_Marca'].get();
+      String marca = marcaDoc['Marca'];
+
+      return {
+        'ID': doc.id,
+        'Modelo': doc['Modelo'],
+        'Marca': marca,
+      };
+    }).toList());
+  }
+
 }
