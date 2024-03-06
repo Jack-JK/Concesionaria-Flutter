@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/compra.dart';
 import 'package:flutter_application_1/pages/home.dart';
@@ -28,7 +29,9 @@ class _MarcaPageState extends State<MarcaPage> {
         _marcas = marcas;
       });
     }).catchError((error) {
-      print('Error al leer marcas: $error');
+      if (kDebugMode) {
+        print('Error al leer marcas: $error');
+      }
     });
   }
 

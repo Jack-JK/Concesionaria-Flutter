@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/compra.dart';
 import 'package:flutter_application_1/pages/home.dart';
@@ -25,7 +26,9 @@ class _ModeloPageState extends State<ModeloPage> {
         _modelos = modelos;
       });
     }).catchError((error) {
-      print('Error al leer modelos: $error');
+      if (kDebugMode) {
+        print('Error al leer modelos: $error');
+      }
     });
   }
 

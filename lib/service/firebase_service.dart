@@ -77,6 +77,17 @@ class FirebaseService {
       };
     }).toList());
   }
+  //Leer modelo para venta y compra
+  static Future<List<Map<String, dynamic>>> leerModelos2(String idMarca) async {
+    QuerySnapshot querySnapshot = await _db.collection('Modelo').where('Id_Marca', isEqualTo: idMarca).get();
+
+    return querySnapshot.docs.map((doc) {
+      return {
+        'ID': doc.id,
+        'Modelo': doc['Modelo'],
+      };
+    }).toList();
+  }
 
   // TABLA PROVEEDOR
   static Future<void> guardarProveedor(String razonSocial, int telefono, String direccion) async {
@@ -102,6 +113,22 @@ class FirebaseService {
     }).toList();
   }
 
+  //CLIENTES
+  static Future<List<Map<String, dynamic>>> leerClientes() async {
+    QuerySnapshot querySnapshot = await _db.collection('Cliente').get();
+
+    return querySnapshot.docs.map((doc) {
+      return {
+        'ID': doc.id,
+        'Nombre': doc['Nombre'],
+        'Apellido': doc['Apellido'],
+        'CI': doc['CI'],
+        'Fecha_Nacimiento': doc['Fecha_Nacimiento'],
+        'Estado': doc['Estado'],
+        'Telefono': doc['Telefono'],
+      };
+    }).toList();
+  }
 
 
   

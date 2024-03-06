@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const LoginPage(title: 'login')),
+                    builder: (context) => LoginPage(title: 'login')),
               );
             },
             child: const Text('Iniciar Sesión'),
