@@ -55,30 +55,46 @@ class _VentaPageState extends State<VentaPage> {
     });
   }
 
-void _cargarModelos(String idMarca) {
-  FirebaseService.leerModelos2(idMarca).then((modelos) {
-    setState(() {
-      // Filtrar los modelos que tienen la misma idMarca que la marca seleccionada
-      _modelos = modelos.where((modelo) => modelo['Id_Marca'] == idMarca).toList();
+  void _cargarModelos(String idMarca) {
+    FirebaseService.leerModelos2(idMarca).then((modelos) {
+      setState(() {
+        _modelos = modelos;
+        _selectedModelo = null;
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Error al cargar modelos: $error');
+      }
     });
-  }).catchError((error) {
-    print('Error al cargar modelos: $error');
-  });
-}
-
-
-
-  void _cargarVehiculos() {
-    // Lógica para cargar los vehículos con referencia al modelo seleccionado desde Firebase
   }
 
+  void _cargarVehiculos() {
+    if (_selectedModelo == null) {
+      return;
+    }
+
+    FirebaseService.leerVehiculosPorModeloEstado(_selectedModelo!).then((vehiculos) {
+      setState(() {
+        _vehiculos = vehiculos;
+      });
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Error al cargar vehículos: $error');
+      }
+    });
+  }
+
+
   void _agregarDetalleVenta(Map<String, dynamic> vehiculo) {
+    double costo = double.parse(vehiculo['Precio'].toString());
+    double subtotal = 1 * costo;
+
     setState(() {
       _detalleVenta.add({
-        'Id_Vehiculo': vehiculo['Id'], // Suponiendo que 'Id' es el campo que contiene el ID del vehículo
-        'Cantidad': 1, // Cantidad por defecto
-        'Costo': vehiculo['Precio'],
-        'Subtotal': vehiculo['Precio'],
+        'Id_Vehiculo': vehiculo['ID'],
+        'Cantidad': 1,
+        'Costo': costo,
+        'Subtotal': subtotal,
       });
     });
   }
@@ -201,53 +217,51 @@ void _cargarModelos(String idMarca) {
                   }
                 },
               ),
-            const SizedBox(height: 16),
-                const Text(
-                  'Marca:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedMarca, // Valor seleccionado de la marca
-                  items: _marcas.map((marca) {
-                    return DropdownMenuItem<String>(
-                      value: marca['ID'].toString(),
-                      child: Text(marca['Marca']),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedMarca = value!;
-                      _selectedModelo = value; // Reiniciar el modelo seleccionado
-                    });
-                    _cargarModelos(value!); // Cargar modelos al seleccionar una marca
-                  },
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Modelo:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedModelo, // Valor seleccionado del modelo
-                  items: _modelos.map((modelo) {
-                    return DropdownMenuItem<String>(
-                      value: modelo['ID'].toString(),
-                      child: Text(modelo['Modelo']),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedModelo = value!;
-                    });
-                  },
-                ),
-
+              const SizedBox(height: 16),
+              const Text(
+                'Marca:',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: _selectedMarca, // Valor seleccionado de la marca
+                items: _marcas.map((marca) {
+                  return DropdownMenuItem<String>(
+                    value: marca['ID'].toString(),
+                    child: Text(marca['Marca']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedMarca = value!;
+                  });
+                  _cargarModelos(value!); // Cargar modelos al seleccionar una marca
+                },
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Modelo:',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: _selectedModelo, // Valor seleccionado del modelo
+                items: _modelos.map((modelo) {
+                  return DropdownMenuItem<String>(
+                    value: modelo['ID'].toString(),
+                    child: Text(modelo['Modelo']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedModelo = value!;
+                  });
+                },
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  if (_selectedMarca != null) {
+                  if (_selectedMarca != null && _selectedModelo != null) {
                     _cargarVehiculos();
                   }
                 },
@@ -258,17 +272,18 @@ void _cargarModelos(String idMarca) {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   columns: const [
-                    DataColumn(label: Text('Id')),
+                    DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Cilindrada')),
                     DataColumn(label: Text('Transmisión')),
                     DataColumn(label: Text('Año')),
                     DataColumn(label: Text('Chasis')),
                     DataColumn(label: Text('Precio')),
+                    DataColumn(label: Text('Acciones')),
                   ],
                   rows: _vehiculos.map((vehiculo) {
                     return DataRow(
                       cells: [
-                        DataCell(Text(vehiculo['Id'].toString())),
+                        DataCell(Text(vehiculo['ID'].toString())),
                         DataCell(Text(vehiculo['Cilindrada'])),
                         DataCell(Text(vehiculo['Transmision'])),
                         DataCell(Text(vehiculo['Anio'].toString())),
@@ -342,11 +357,11 @@ void _cargarModelos(String idMarca) {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                items: [
-                  const DropdownMenuItem(value: 'efectivo', child: Text('Efectivo')),
-                  const DropdownMenuItem(value: 'tarjeta', child: Text('Tarjeta de Crédito/Débito')),
-                  const DropdownMenuItem(value: 'transferencia', child: Text('Transferencia Bancaria')),
-                  const DropdownMenuItem(value: 'cheque', child: Text('Cheque')),
+                items: const [
+                  DropdownMenuItem(value: 'efectivo', child: Text('Efectivo')),
+                  DropdownMenuItem(value: 'tarjeta', child: Text('Tarjeta de Crédito/Débito')),
+                  DropdownMenuItem(value: 'transferencia', child: Text('Transferencia Bancaria')),
+                  DropdownMenuItem(value: 'cheque', child: Text('Cheque')),
                 ],
                 onChanged: (value) {},
               ),
