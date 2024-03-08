@@ -153,7 +153,23 @@ class FirebaseService {
     }).toList();
   }
 
+  static Future<int> guardarV(String coleccion, Map<String, dynamic> datos) async {
+    int nuevoID = await _asignarID(coleccion);
 
+    await _db.collection(coleccion).doc(nuevoID.toString()).set({
+      'id': nuevoID,
+      ...datos,
+    });
+
+    return nuevoID;
+  }
+
+  static Future<void> actualizarEstadoVehiculo(String idVehiculo, bool nuevoEstado) async {
+    await FirebaseFirestore.instance
+        .collection('Vehiculo')
+        .doc(idVehiculo)
+        .update({'Estado': nuevoEstado});
+  }
 
 }
 

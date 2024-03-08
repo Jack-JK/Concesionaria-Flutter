@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/compra.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/marca.dart';
 import 'package:flutter_application_1/pages/modelo.dart';
-import 'package:flutter_application_1/pages/rol.dart';
 import 'package:flutter_application_1/pages/venta.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 
@@ -86,32 +84,12 @@ class _ProveedorPageState extends State<ProveedorPage> {
               },
             ),
             ListTile(
-              title: const Text('Compra'),
-              onTap: () {
-                // Navegación a Compra
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CompraPage())
-                );
-              },
-            ),
-            ListTile(
               title: const Text('Venta'),
               onTap: () {
                 // Navegación a Venta
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const VentaPage())
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Rol'),
-              onTap: () {
-                // Navegación a Rol
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RolPage())
                 );
               },
             ),
